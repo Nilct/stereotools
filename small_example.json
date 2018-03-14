@@ -1,0 +1,7 @@
+{
+    "input_path":"/home/cparisel/Pictures/Pano/",
+    "input_pattern":"campusA4_",
+    "output_fullpath":"/home/cparisel/Pictures/small_movie.avi",
+    "scale":8,
+    "fps":8
+}
