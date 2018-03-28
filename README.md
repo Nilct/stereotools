@@ -1,1 +1,1 @@
-# gopano
+# Tools for stereo project
