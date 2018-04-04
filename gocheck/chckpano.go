@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -14,11 +15,15 @@ import (
 // CHUNKSIZE is the size of one chunck
 const CHUNKSIZE = 1000.0
 
+var csvFields []string
+var csvData []string
+
 // Configuration data
 type Configuration struct {
 	InputPath  string `json:"input_path"`
 	OutputPath string `json:"output_subfolder"`
 	Perc       int    `json:"percentage"`
+	Fields     string `json:"fields"`
 }
 
 func initRandom() {
@@ -38,6 +43,11 @@ func setup(filename string) *Configuration {
 		fmt.Println("FAIL to decode config file")
 		fmt.Println("error:", err)
 	}
+
+	// get all fields for csv file
+	s := strings.Trim(configuration.Fields, " ")
+	csvFields = strings.Split(s, ",")
+	csvData = make([]string, len(csvFields))
 
 	return &configuration
 }
@@ -73,16 +83,34 @@ func selectPanoramics(config *Configuration, images []string) {
 	if debug {
 		fmt.Printf("noOfSplits: %d, noOfPickedImages in one chunk: %d\n", noOfSplits, noOfPickedImages)
 	}
+
+	fmt.Printf("selected panoramics are saved in %s\n", path.Join(config.OutputPath, "panoramics.csv"))
+	file, err := os.OpenFile(path.Join(config.OutputPath, "panoramics.csv"), os.O_CREATE|os.O_WRONLY, 0777)
+	defer file.Close()
+
+	if err != nil {
+		fmt.Printf("Problem creating csv file (check if it already exists)\n")
+		os.Exit(1)
+	}
+	writer := csv.NewWriter(file)
+	writer.Write(csvFields)
+	writer.Flush()
+
+	var picName string
 	for i := 0; i < noOfSplits; i++ {
 		startIndex := CHUNKSIZE * i
 		for j := 0; j < noOfPickedImages; j++ {
 			pick := rand.Intn(CHUNKSIZE) // warning : allow for duplicate
 			if startIndex+pick < len(images) {
+				picName = images[startIndex+pick]
 				// check file has not been moved already
-				if _, err := os.Stat(path.Join(config.InputPath, images[startIndex+pick])); err == nil {
-					err = os.Rename(path.Join(config.InputPath, images[startIndex+pick]), path.Join(config.OutputPath, images[startIndex+pick]))
+				if _, err := os.Stat(path.Join(config.InputPath, picName)); err == nil {
+					err = os.Rename(path.Join(config.InputPath, picName), path.Join(config.OutputPath, picName))
 					if err == nil {
 						totalPick++
+						csvData[0] = picName
+						writer.Write(csvData)
+						writer.Flush()
 					}
 				}
 			}

@@ -1,5 +1,6 @@
 {
     "input_path":"/mnt/idi1/Stereopolis3/VSR/20180124/PPS_1/FLOUTAGE/PANO/CONTROLE",
     "output_subfolder":"/mnt/idi1/Stereopolis3/VSR/20180124/PPS_1/FLOUTAGE/PANO/CONTROLE/CHECKED",
-    "percentage":2
+    "percentage":2,
+    "fields":"NomPanoramique, NbDetectionPersonne, NbSurdetectionPersonneOK, NbSurdetectionPersonneNOK, NbOmissionPersonne, NbDetectionVoiture, NbSurdetectionVoitureOK, NbSurdetectionVoitureNOK, NbOmissionVoiture"
 }

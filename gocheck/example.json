@@ -1,5 +1,6 @@
 {
     "input_path":"/home/cparisel/Pictures/Pano/",
     "output_subfolder":"/home/cparisel/Pictures/Pano/CHECKED",
-    "percentage":8
+    "percentage":8,
+    "fields":"NomPanoramique, NbDetectionPersonne, NbSurdetectionPersonneOK, NbSurdetectionPersonneNOK, NbOmissionPersonne, NbDetectionVoiture, NbSurdetectionVoitureOK, NbSurdetectionVoitureNOK, NbOmissionVoiture"
 }
